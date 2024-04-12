@@ -1,0 +1,35 @@
+{
+  "name": "fws_cloud",
+  "version": "1.0.0",
+  "description": "simple cloud alternative to upload and download file remotly",
+  "main": "index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "test": "npm test",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf ./build",
+    "start": "ts-node-dev src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/LekeneCedric/Fws_cloud.git"
+  },
+  "author": "Lekene Cedric",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LekeneCedric/Fws_cloud/issues"
+  },
+  "homepage": "https://github.com/LekeneCedric/Fws_cloud#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ts-node-dev": "^2.0.0"
+  }
+}
