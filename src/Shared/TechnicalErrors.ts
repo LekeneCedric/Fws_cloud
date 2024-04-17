@@ -1,3 +1,4 @@
 export const TechnicalErrors = {
-	"warning": "Une érreur est survenue lors du traitement de votre opération veuillez réessayer !"
+	warning: "An error occurred while processing your operation, please try again!",
+	critical: "A critical error occurred during the processing of your operation, the technical team has been informed!",
 }

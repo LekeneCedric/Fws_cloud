@@ -14,7 +14,7 @@ export default class SignUpHandler {
 		const response = new SignUpResponse();
 
 		const user = User.create(command.username, command.email, command.password);
-		this.#repository.save(user);
+		this.#repository.create(user);
 
 		response.isSaved = true;
 		response.message = 'User create successfully !';

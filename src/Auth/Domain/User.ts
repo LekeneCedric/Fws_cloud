@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid4 } from 'uuid';
+import DateVo from '../../Shared/VO/DateVo';
 
 interface UserConstructor {
 	id: string,
@@ -12,12 +13,13 @@ export default class User {
 	#username: string;
 	#email: string;
 	#password: string;
+	#createdAt?: DateVo;
 
 	private constructor(params: UserConstructor) {
 		this.#id = params.id;
 		this.#username = params.username;
 		this.#email = params.email;
-		this.#password = params.password
+		this.#password = params.password;
 	}
 
 	static create(username: string, email: string, password: string) {
@@ -29,10 +31,21 @@ export default class User {
 				hashedPassword = hash;
 			})
 		});
-		return new this({ id: uuid4(), username: username, email: email, password: hashedPassword })
+		const newUser = new this({ id: uuid4(), username: username, email: email, password: hashedPassword });
+		newUser.#createdAt = new DateVo();
+		return newUser;
 	}
 
 	id(): string {
 		return this.#id;
+	}
+
+	toDocument(): Object {
+		return {
+			username: this.#username,
+			email: this.#email,
+			password: this.#password,
+			created_at: this.#createdAt?.value
+		}
 	}
 }

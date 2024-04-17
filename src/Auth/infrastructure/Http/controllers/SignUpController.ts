@@ -2,10 +2,11 @@ import { Request, Response } from 'express';
 import SignUpCommandFactory from '../../Factories/SignUpCommandFactory';
 import InvalidCommandException from '../../../../Shared/Exceptions/InvalidCommandException';
 import SignUpHandler from '../../../Application/Command/SignUpHandler';
-import PdoUserRepository from '../../Repositories/PdoUserRepository';
+import MongoUserRepository from '../../Repositories/MongoUserRepository';
 import { TechnicalErrors } from '../../../../Shared/TechnicalErrors';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import ErrorOnSaveUserException from '../../Exceptions/ErrorOnSaveUserException';
 
 type SignUpResponse = {
 	status: boolean,
@@ -24,7 +25,7 @@ const SignUpController = async (req: Request, res: Response) => {
 
 	try {
 		const command = SignUpCommandFactory.buildFromRequest(req);
-		const response = new SignUpHandler(new PdoUserRepository()).handle(command);
+		const response = new SignUpHandler(new MongoUserRepository()).handle(command);
 		const token = jwt.sign(
 			{ username: response.user?.username, userId: response.user?.id },
 			process.env.JWT_PRIVATE_KEY!,
@@ -36,10 +37,15 @@ const SignUpController = async (req: Request, res: Response) => {
 		httpResponse.user = response.user;
 		httpResponse.token = token;
 	} catch (error: any) {
-		if (error instanceof InvalidCommandException) {
-			httpResponse.message = error.message;
-		} else {
-			httpResponse.message = error.message;
+		switch (error) {
+			case error instanceof InvalidCommandException:
+				httpResponse.message = error.message;
+				break;
+			case error instanceof ErrorOnSaveUserException:
+				httpResponse.message = TechnicalErrors.critical;
+			default:
+				httpResponse.message = TechnicalErrors.warning;
+				break;
 		}
 	}
 	res.status(200).send(httpResponse);
