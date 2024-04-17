@@ -8,7 +8,7 @@ import MongoDbConnection from './Shared/Configs/Persistence/MongoDB/MongoDbConne
 const app = express();
 const port = process.env.PORT || 8000;
 
-MongoDbConnection.initConnection().then(() => {
+MongoDbConnection.initializeConnection().then(() => {
 
 	app.use(bodyParser.json());
 

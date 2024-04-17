@@ -23,15 +23,7 @@ export default class User {
 	}
 
 	static create(username: string, email: string, password: string) {
-		let hashedPassword: string = '';
-		bcrypt.genSalt(10, function (err: Error | undefined, salt: string) {
-			if (err) throw err;
-			bcrypt.hash(password, salt, function (err: Error | undefined, hash: string) {
-				if (err) throw err;
-				hashedPassword = hash;
-			})
-		});
-		const newUser = new this({ id: uuid4(), username: username, email: email, password: hashedPassword });
+		const newUser = new this({ id: uuid4(), username: username, email: email, password: password });
 		newUser.#createdAt = new DateVo();
 		return newUser;
 	}

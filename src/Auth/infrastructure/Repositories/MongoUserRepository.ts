@@ -5,20 +5,17 @@ import MongoDbConnection from '../../../Shared/Configs/Persistence/MongoDB/Mongo
 import ErrorOnSaveUserException from '../Exceptions/ErrorOnSaveUserException';
 
 export default class MongoUserRepository implements IUserRepository {
-	#connection: MongoDbConnection;
+	private connection: MongoDbConnection;
 
 	constructor() {
-		this.#connection = new MongoDbConnection({ collection: 'users' });
+		this.connection = MongoDbConnection.newConnection({ collection: 'users' });
 	}
 
 	create = async (user: User) => {
 		try {
 			const userData = user.toDocument();
-			await this.#connection.insertOne(userData);
+			await this.connection.insertOne(userData);
 		} catch (error: Error | unknown) {
-			if (error instanceof Error) {
-				console.log(error.message)
-			}
 			throw new ErrorOnSaveUserException();
 		}
 	}

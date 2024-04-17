@@ -6,36 +6,34 @@ interface IMongoDbConnectionConstructor {
 }
 
 export default class MongoDbConnection {
-	static #db: Db | undefined = undefined;
-	#collection: Collection;
+	static client: MongoClient;
+	static db: Db;
+	private collection: Collection;
 
-	static async initConnection() {
-		if (this.#db instanceof Db) {
-			return;
-		}
-		const url = process.env.MONGO_DB_URL!;
-		const dbName = process.env.MONGO_DB_DATABASE!;
-		const client = new MongoClient(url);
-
-		await client.connect();
-
-		const db = client.db(dbName);
-
-		if (this.#db! instanceof Db) {
-			this.#db = db;
-		}
+	private constructor(collection: Collection) {
+		this.collection = collection;
 	}
 
-	constructor(params: IMongoDbConnectionConstructor) {
-		this.#collection = MongoDbConnection.#db?.collection(params.collection)!
+	static async initializeConnection() {
+		const url = process.env.MONGO_DB_URL || '';
+		this.client = new MongoClient(url);
+
+		await this.client.connect();
+
+		const dbName = process.env.MONGO_DB_DATABASE || '';
+		this.db = this.client.db(dbName);
+	}
+
+	static newConnection(params: IMongoDbConnectionConstructor) {
+		const connection = MongoDbConnection.db.collection(params.collection);
+		return new MongoDbConnection(connection)
 	}
 
 	public async insertOne(data: Object) {
-		return await this.#collection.insertOne(data);
+		await this.collection.insertOne(data);
 	}
 
-	public async insertMany(data: Object[]) {
-		return await this.#collection.insertMany(data);
+	public async insertMany(datas: Object[]) {
+		await this.collection.insertMany(datas);
 	}
-
 }

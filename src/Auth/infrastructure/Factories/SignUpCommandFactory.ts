@@ -1,15 +1,16 @@
 import { Request } from 'express'
+import bcrypt from 'bcrypt';
 import InvalidCommandException from '../../../Shared/Exceptions/InvalidCommandException';
 import SignUpCommand from '../../Application/Command/SignUpCommand';
 
 export default class SignUpCommandFactory {
 
-	static buildFromRequest = (req: Request) => {
+	static buildFromRequest = async (req: Request) => {
 		this.validateRequest(req);
 
 		const username = req.body.username;
 		const email = req.body.email;
-		const password = req.body.password;
+		const password = await bcrypt.hash(req.body.password, 10);
 
 		return new SignUpCommand({ username: username, email: email, password: password });
 	}

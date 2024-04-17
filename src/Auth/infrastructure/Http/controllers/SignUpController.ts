@@ -24,7 +24,7 @@ const SignUpController = async (req: Request, res: Response) => {
 	} as SignUpResponse;
 
 	try {
-		const command = SignUpCommandFactory.buildFromRequest(req);
+		const command = await SignUpCommandFactory.buildFromRequest(req);
 		const response = new SignUpHandler(new MongoUserRepository()).handle(command);
 		const token = jwt.sign(
 			{ username: response.user?.username, userId: response.user?.id },
