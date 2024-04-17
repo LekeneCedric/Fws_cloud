@@ -10,7 +10,9 @@ const routes_1 = __importDefault(require("./Auth/infrastructure/routes/routes"))
 const MongoDbConnection_1 = __importDefault(require("./Shared/Configs/Persistence/MongoDB/MongoDbConnection"));
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8000;
+console.log('initialize mongoDBConnection .....');
 MongoDbConnection_1.default.initializeConnection().then(() => {
+    console.log('MongoDbConnection initialize successfuly ....');
     app.use(body_parser_1.default.json());
     app.use('/api/auth', routes_1.default);
     app.listen(port, () => console.log(`[SERVER]: started at ${port}`));

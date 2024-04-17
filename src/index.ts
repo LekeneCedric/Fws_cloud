@@ -9,7 +9,6 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 MongoDbConnection.initializeConnection().then(() => {
-
 	app.use(bodyParser.json());
 
 	app.use('/api/auth', authRoutes);

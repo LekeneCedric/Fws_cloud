@@ -22,9 +22,6 @@ class MongoUserRepository {
                 yield this.connection.insertOne(userData);
             }
             catch (error) {
-                if (error instanceof Error) {
-                    console.log(error.message);
-                }
                 throw new ErrorOnSaveUserException_1.default();
             }
         });

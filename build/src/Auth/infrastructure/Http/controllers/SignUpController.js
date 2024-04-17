@@ -29,7 +29,7 @@ const SignUpController = (req, res) => __awaiter(void 0, void 0, void 0, functio
         token: '',
     };
     try {
-        const command = SignUpCommandFactory_1.default.buildFromRequest(req);
+        const command = yield SignUpCommandFactory_1.default.buildFromRequest(req);
         const response = new SignUpHandler_1.default(new MongoUserRepository_1.default()).handle(command);
         const token = jsonwebtoken_1.default.sign({ username: (_a = response.user) === null || _a === void 0 ? void 0 : _a.username, userId: (_b = response.user) === null || _b === void 0 ? void 0 : _b.id }, process.env.JWT_PRIVATE_KEY, { expiresIn: 60 * 60 });
         httpResponse.message = response.message;

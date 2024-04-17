@@ -15,7 +15,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _User_id, _User_username, _User_email, _User_password, _User_createdAt;
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const uuid_1 = require("uuid");
 const DateVo_1 = __importDefault(require("../../Shared/VO/DateVo"));
 class User {
@@ -31,17 +30,7 @@ class User {
         __classPrivateFieldSet(this, _User_password, params.password, "f");
     }
     static create(username, email, password) {
-        let hashedPassword = '';
-        bcrypt_1.default.genSalt(10, function (err, salt) {
-            if (err)
-                throw err;
-            bcrypt_1.default.hash(password, salt, function (err, hash) {
-                if (err)
-                    throw err;
-                hashedPassword = hash;
-            });
-        });
-        const newUser = new this({ id: (0, uuid_1.v4)(), username: username, email: email, password: hashedPassword });
+        const newUser = new this({ id: (0, uuid_1.v4)(), username: username, email: email, password: password });
         __classPrivateFieldSet(newUser, _User_createdAt, new DateVo_1.default(), "f");
         return newUser;
     }
